@@ -8,7 +8,8 @@ router.get('/', (req, res, next) => {
 
 
 router.get('/chat', (req, res, next) => {
-  Chat.find().then(item => {
+  Chat.find()
+  .then(item => {
     res.json({
       error: false,
       listed: item
@@ -36,6 +37,16 @@ router.post('/chat', (req, res, next) => {
     })
   })
 });
+
+router.delete('/chat:id', (req, res, next) => {
+  Chat.deleteMany({id: req.params.id })
+  .then(item => {
+    res.json({
+      error: false,
+      deleted: item
+    })
+  })
+})
 
 
 module.exports = router;
