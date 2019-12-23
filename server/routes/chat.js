@@ -8,12 +8,22 @@ router.get('/', (req, res, next) => {
 
 
 router.get('/chat', (req, res, next) => {
-  res.send('API');
+  Chat.find().then(item => {
+    res.json({
+      error: false,
+      listed: item
+    })
+  }).catch(err => {
+    res.json({
+      error: true,
+      message: err
+    })
+  })
 });
 
 
 router.post('/chat', (req, res, next) => {
-  Chat.create({name: req.body.user, message: req.body.message})
+  Chat.create({id: Date.now(),user: req.body.user, message: req.body.message})
   .then(item => {
     res.json({
       error: false,
@@ -26,5 +36,6 @@ router.post('/chat', (req, res, next) => {
     })
   })
 });
+
 
 module.exports = router;
