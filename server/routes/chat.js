@@ -6,7 +6,7 @@ router.get('/', (req, res, next) => {
   res.send('API');
 });
 
-
+// GET CHAT DATA ROUTE
 router.get('/chat', (req, res, next) => {
   Chat.find()
   .then(item => {
@@ -22,7 +22,7 @@ router.get('/chat', (req, res, next) => {
   })
 });
 
-
+// POST NEW CHAT ROUTE
 router.post('/chat', (req, res, next) => {
   Chat.create({id: Date.now(),user: req.body.user, message: req.body.message})
   .then(item => {
@@ -38,15 +38,21 @@ router.post('/chat', (req, res, next) => {
   })
 });
 
-router.delete('/chat:id', (req, res, next) => {
-  Chat.deleteMany({id: req.params.id })
+// DELTE ROUTE
+router.delete('/chat/:id', (req, res, next) => {
+  Chat.deleteMany({id: req.params.id})
   .then(item => {
     res.json({
       error: false,
       deleted: item
     })
+  }).catch(err => {
+    res.json({
+      error: true,
+      message: err
+    })
   })
-})
+});
 
 
 module.exports = router;
