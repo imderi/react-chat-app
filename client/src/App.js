@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import axios from 'axios';
+import io from 'socket.io-client'
 import './App.css';
+
+// LOAD SOCKET
+const socket = io('http://localhost:3000');
+
+const API_URL = 'http://localhost:3000/api/chat';
 
 class App extends Component {
   render() {
@@ -13,7 +19,7 @@ class App extends Component {
 
         </div>
 
-        <CreateChat />
+        <ChatForm />
 
       </div>
     );
@@ -33,7 +39,7 @@ class ChatBubble extends Component {
   }
 }
 
-class CreateChat extends Component {
+class ChatForm extends Component {
   render() {
     return (
         <div className="card-footer">
