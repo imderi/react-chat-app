@@ -9,6 +9,7 @@ mongoose.connect('mongodb://localhost:27017/reactchat', { useNewUrlParser: true,
 // var bodyParser = require('body-parser');
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var cors = require('cors')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -22,25 +23,26 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
-io.on('connection', function (socket){
-  socket.on('typing', (typer)=> {
-    socket.broadcast.emit('typing', typer);
-  });
+// io.on('connection', function (socket){
+//   socket.on('typing', (typer)=> {
+//     socket.broadcast.emit('typing', typer);
+//   });
 
-  socket.on('stop typing', ()=> {
-    socket.broadcast.emit('stop typing');
-  });
+//   socket.on('stop typing', ()=> {
+//     socket.broadcast.emit('stop typing');
+//   });
 
-  socket.on('add chat', (chatData = {})=> {
-    socket.broadcast.emit('loat chat', chatData);
-  });
+//   socket.on('add chat', (chatData = {})=> {
+//     socket.broadcast.emit('loat chat', chatData);
+//   });
 
-  socket.on('delete chat', id => {
-    socket.broadcast.emit('delete chat', id);
-  });
+//   socket.on('delete chat', id => {
+//     socket.broadcast.emit('delete chat', id);
+//   });
 
-});
+// });
 
 
 app.use('/', indexRouter);
