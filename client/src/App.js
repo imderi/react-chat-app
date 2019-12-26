@@ -7,13 +7,50 @@ const API_URL = "http://localhost:3000/api/chat"
 import './App.css';
 
 class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {data: [], typer: ''};
+    
+    this.endRef = null;
+  }
+
+  componentDidMount(){
+    this.loadChat().then(() => {
+      this.scrollToBottom();
+    })
+    socket.on('load chat', (newData) => {
+      this.setState((state) => ({ data: [...state.data, newData]}))
+    })
+  }
+
+  loadChat = () => {
+    return axios.get(API_URL)
+    .then((response) => {
+      if (response.data.error){
+        console.log(response.data.message);
+      } 
+      else{
+        let chatData = response.data.listed.map((chat) => {
+          return { ...chat, status: true };
+      })
+        this.setState({ data: chatData});
+        console.log('DATA DATA DATA DATA',chatData);
+      } 
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+  }
+
   render() {
     return (
       <div className="card mt-3 " >
         <h4 className="card-header text-center text-white bg-primary">React Chat</h4>
    
         <div className="card-body">
-          <ChatBubble />
+          {this.state.data.map(chatData => (
+            <ChatBubble key={chatData.id} chatData={chatData} />
+          ))}
         </div>
 
         <div className="card-footer">
@@ -25,18 +62,28 @@ class App extends Component {
   }
 }
 
-class ChatBubble extends Component {
-  render() {
+function ChatBubble(props) {
+  let { user, message, id} = props.chatData;
     return (
       <div className="card mb-2">
-        <h5 className="card-header">Batman</h5>
+        <div className="card-header d-flex">
+          <h5 className="p-2">
+          {user}
+          </h5>
+          <button className="btn btn-outline-danger ml-auto p-2"><i className="fa fa-trash"></i></button>
+        
+        </div>
         <div className="card-body">
-          <p>Lagi apa bro?</p>
+          <div className="overflow-auto">
+          <p>{message}</p>
+          </div>
         </div>
       </div>
     )
-  }
 }
+
+// class ChatBubble extends Component {
+// }
 
 class CreateChat extends Component {
   constructor(props) {
@@ -75,12 +122,12 @@ class CreateChat extends Component {
     // CLEAR FORM AFTER CHAT POSTED
     if(
       (user.length > 0 && message.length > 0) ||
-      (user.length === 0 && message.length == 0)
+      (user.length === 0 && message.length === 0)
     ) this.setState({user: "", message: ""})
   }
 
   onEnterPress = e => {
-    if (e.keyCode == 13 && !e.shiftKey){
+    if (e.keyCode === 13 && !e.shiftKey){
       e.preventDefault();
       this.formRef.click();
     } else {}
