@@ -38,7 +38,7 @@ router.post('/chat', (req, res, next) => {
   })
 });
 
-// DELTE ROUTE
+// DELETE ROUTE
 router.delete('/chat/:id', (req, res, next) => {
   Chat.deleteMany({id: req.params.id})
   .then(item => {

@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import ChatBox from './component/chatBox';
 
 ReactDOM.render(
-  <App />,
+  <ChatBox />,
   document.getElementById('root')
 );

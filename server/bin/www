@@ -21,6 +21,31 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
+// SOCKET IO CHANNEL
+var allowedOrigins = "http://localhost:* http://127.0.0.1:* http://*";
+var io = require('socket.io')(server, {origins: allowedOrigins});
+
+io.on('connection', function (socket) {
+console.log("Socket.io Connect!");
+
+  socket.on('typing', (typer) => {
+    socket.broadcast.emit('typing', typer);
+  });
+
+  socket.on('stop typing', () => {
+    socket.broadcast.emit('stop typing');
+  })
+
+  socket.on('add chat', (chatData) => {
+    console.log(chatData);
+    socket.broadcast.emit('load chat', chatData);
+  });
+
+  socket.on('delete chat', id => {
+    socket.broadcast.emit('delete chat', id);
+  })
+  
+})
 /**
  * Listen on provided port, on all network interfaces.
  */

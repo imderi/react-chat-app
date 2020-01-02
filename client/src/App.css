@@ -1,3 +1,8 @@
+.divscroll {
+  overflow-y: scroll;
+  height:400px;
+}
+
 .cbp_tmtimeline {
   margin: 0;
   padding: 0;
